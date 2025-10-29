@@ -9,16 +9,23 @@
   outputs = { self, nixpkgs, utils, ... }:
     utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            (final: prev: {
+              glfwNew = prev.glfw.overrideAttrs ( old: {
+                patches = old.patches ++ [
+                  ./add_mappings.diff
+                ];
+              });
+            })
+          ];
+
+        };
       in
       {
         packages = rec {
-          vkdt-git = pkgs.stdenv.mkDerivation rec {
-            pname = "vkdt";
-            version = "git";
-
-            src = pkgs.lib.cleanSource ./.;
-
+          vkdt-git = pkgs.stdenv.mkDerivation {
             cargoRoot = "src/pipe/modules/i-raw/rawloader-c";
 
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
@@ -29,10 +36,11 @@
             strictDeps = true;
 
             nativeBuildInputs = with pkgs; [
+              # SDL2
               cargo
               clang
               cmake
-              git
+              glfwNew
               glslang
               llvm
               llvmPackages.openmp
