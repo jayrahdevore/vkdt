@@ -25,13 +25,19 @@
       in
       {
         packages = rec {
-          vkdt-git = pkgs.stdenv.mkDerivation {
+          
+          vkdt-git = pkgs.stdenv.mkDerivation rec {
+
             cargoRoot = "src/pipe/modules/i-raw/rawloader-c";
 
             cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
               inherit pname src cargoRoot;
               hash = "sha256-8+gJVe9A1w9VlQpKjVnO/ZX44GKvh4yXKlGf4HqyW2M=";
             };
+            pname = "vkdt";
+            version = "git";
+            src = pkgs.lib.cleanSource ./.;
+
 
             strictDeps = true;
 
@@ -55,7 +61,7 @@
               exiv2
               ffmpeg
               freetype
-              glfw
+              glfwNew
               libjpeg
               libmad
               libvorbis
@@ -81,6 +87,7 @@
 
         devShells.default = pkgs.mkShell {
           inputsFrom = [ self.packages.${system}.vkdt-git ];
+          VKDT_USE_RAWINPUT=2;
         };
       }
     );
