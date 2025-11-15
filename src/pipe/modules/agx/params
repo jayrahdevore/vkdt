@@ -1,0 +1,6 @@
+sat:float:1:1.0
+offset:float:1:0.0
+slope_r:float:1:1.0
+slope_g:float:1:1.0
+slope_b:float:1:1.0
+power:float:1:1.0

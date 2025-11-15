@@ -1,0 +1,6 @@
+sat:slider:0:1.5
+offset:slider:-0.02:0.02
+slope_r:slider:0.8:1.2
+slope_g:slider:0.8:1.2
+slope_b:slider:0.8:1.2
+power:slider:0.8:1.2
